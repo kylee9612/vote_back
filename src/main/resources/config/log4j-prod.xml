@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="INFO">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{HH:mm:ss.SSSZ} [%t] %-5level %logger{36} - %msg%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="ConsoleLog" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+        </Console>
+        <RollingFile name="FileLog"
+                     fileName="/home/axiasoft/logs/vote_back/vote_back.log"
+                     filePattern="/home/axiasoft/logs/vote_back/vote_back_%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="10000KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" fileIndex="min" />
+        </RollingFile>
+        <RollingFile name="FileLogError" fileName="/home/axiasoft/logs/vote_back/vote_back_error.log"
+                     filePattern="/home/axiasoft/logs/vote_back/vote_back_error_%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="10000KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20" fileIndex="min"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ConsoleLog" />
+            <AppenderRef ref="FileLog" />
+            <AppenderRef ref="FileLogError" level="ERROR"/>
+        </Root>
+    </Loggers>
+</Configuration>
