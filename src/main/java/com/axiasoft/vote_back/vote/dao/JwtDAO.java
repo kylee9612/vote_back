@@ -12,25 +12,25 @@ import java.util.Map;
 @Repository
 public class JwtDAO {
     private static final Logger log = LogManager.getLogger(JwtDAO.class);
-    private static final String NAMESAPCE="com.axiasoft.vote_back.jwt.dao.";
+    private static final String NAMESPACE="com.axiasoft.vote_back.jwt.dao.";
     private final SqlSession sqlSession;
 
     public JwtDAO(@Qualifier("sqlSessionTemplate") SqlSession sqlSession){
         this.sqlSession = sqlSession;
     }
     public Map<String, Object> dbValidateToken(Map<String, Object> map) throws Exception{
-        return sqlSession.selectOne(NAMESAPCE + "dbValidateToken", map);
+        return sqlSession.selectOne(NAMESPACE + " ", map);
     }
 
     public int updateAmlJwtToken(Map<String, Object> map) throws Exception{
-        return sqlSession.update(NAMESAPCE + "updateAmlJwtToken", map);
+        return sqlSession.update(NAMESPACE + "updateAmlJwtToken", map);
     }
 
     public int updateJwtToken(Map<String, Object> map) throws Exception{
-        return sqlSession.update(NAMESAPCE + "updateJwtToken", map);
+        return sqlSession.update(NAMESPACE + "updateJwtToken", map);
     }
 
     public int insertJwtToken(Map<String, Object> map) throws Exception{
-        return sqlSession.insert(NAMESAPCE + "insertJwtToken", map);
+        return sqlSession.insert(NAMESPACE + "insertJwtToken", map);
     }
 }
