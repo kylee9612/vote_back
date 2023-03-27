@@ -1,12 +1,11 @@
 package com.axiasoft.vote_back.admin.dao;
 
-import com.axiasoft.vote_back.util.SHA256Util;
+import com.axiasoft.vote_back.util.cipher.SHA256Util;
 import jakarta.annotation.PostConstruct;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

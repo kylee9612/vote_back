@@ -18,6 +18,14 @@ public class ApiResponse<T> implements Serializable {
         this.code = errorCode.getCode();
         this.data = data;
     }
+
+    public ApiResponse(ErrorCode errorCode){
+        this.success = false;
+        this.message = errorCode.getMsg();
+        this.code = errorCode.getCode();
+        this.data = null;
+    }
+
     @Override
     public String toString() {
         if(this.data != null){

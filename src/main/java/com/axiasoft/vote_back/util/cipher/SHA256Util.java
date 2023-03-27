@@ -1,4 +1,4 @@
-package com.axiasoft.vote_back.util;
+package com.axiasoft.vote_back.util.cipher;
 
 import org.springframework.stereotype.Component;
 

@@ -7,3 +7,10 @@ spring:
       password: root
 logging:
   config: classpath:config/log4j-local.xml
+jwt:
+  secret: axiaSecret
+  user:
+    accessToken:
+      expirationInMinute: 30
+    refreshToken:
+      expirationInMinute: 720
