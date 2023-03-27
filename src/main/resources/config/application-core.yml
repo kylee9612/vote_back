@@ -1,0 +1,16 @@
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 215MB
+  output:
+    ansi:
+      enabled: always
+logging:
+  file:
+    path: logs
+  level:
+    com:
+      tutorial:
+        springboot: DEBUG
