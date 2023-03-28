@@ -3,6 +3,7 @@ package com.axiasoft.vote_back.vote.controller;
 import com.axiasoft.vote_back.util.response.ApiResponse;
 import com.axiasoft.vote_back.util.response.CommonErrorCode;
 import com.axiasoft.vote_back.vote.service.NoticeService;
+import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +26,10 @@ public class NoticeController {
     @GetMapping("/getNoticeList")
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
         log.info("=============================START========================================== in " + request.getRequestURL());
+        int pageSize = 10 ;
+        log.info(request);
+        JsonObject jsonObject = new JsonObject();
+//        noticeService.getNoticeList();
         // 1. 그냥 들어왔을때
         // 2. 페이지 이동
         // 3-1 검색어 이동

@@ -1,9 +1,12 @@
 spring:
+  session:
+    store-type: jdbc
+    jdbc.initialize-schema: always
   datasource:
     hikari:
-      jdbc-url: jdbc:mysql://localhost:3306/?
-      username: root
-      password: root
+      jdbc-url: jdbc:mysql://vote.civiokbpzd6f.ap-northeast-2.rds.amazonaws.com/axia
+      username: axia
+      password: shfkdxhdekfr12#$
       driver-class-name: com.mysql.cj.jdbc.Driver
 logging:
   config: classpath:config/log4j-local.xml
