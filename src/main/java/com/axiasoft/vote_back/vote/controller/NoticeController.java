@@ -29,7 +29,6 @@ public class NoticeController {
         int pageSize = 10 ;
         log.info(request);
         JsonObject jsonObject = new JsonObject();
-//        noticeService.getNoticeList();
         // 1. 그냥 들어왔을때
         // 2. 페이지 이동
         // 3-1 검색어 이동
