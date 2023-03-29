@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,5 +20,14 @@ public class AdminService {
 
         Map<String, Object> resultMap = adminDAO.selectLogin(map);
         return resultMap;
+    }
+
+    public Map<String, List<Map<String, Object>>> voteResult(){
+        int latestRound = adminDAO.selectLatestRound();
+        Map<String, List<Map<String, Object>>> map = new HashMap();
+        for(int i = 1; i <= latestRound; i++){
+            map.put(String.valueOf(i),adminDAO.selectVoteResult(i));
+        }
+        return map;
     }
 }

@@ -9,4 +9,22 @@
         WHERE ad_id = #{ad_id}
         AND ad_pw = #{ad_password}
     </select>
+
+    <select id="selectLatestRound" resultType="int">
+        SELECT round
+        FROM axia.vote_round
+        ORDER BY round DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectVoteResult" parameterType="hashmap" resultType="hashmap">
+        SELECT a.vt_target,
+               (select count(b.vt_target)
+                from vote_result b
+                where b.vt_target = a.vt_target
+                  and b.vt_round = a.vt_round) as count
+        FROM axia.vote_result a
+        WHERE vt_round = 1
+        order by vt_target;
+    </select>
 </mapper>

@@ -2,7 +2,6 @@ package com.axiasoft.vote_back.common.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import jakarta.annotation.PostConstruct;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 @Configuration
-@Import({ProfileLocal.class, ProfileDev.class, ProfileProdA.class})
+@Import({ProfileLocal.class, ProfileDev.class, ProfileProd.class})
 @PropertySource("classpath:/config/application-core.yml")
 @EnableTransactionManagement
 public class DatabaseConfig {

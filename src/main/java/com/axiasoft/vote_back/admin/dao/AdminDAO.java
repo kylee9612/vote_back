@@ -6,10 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 public class AdminDAO {
@@ -48,6 +45,14 @@ public class AdminDAO {
 
     public Map <String, Object> selectLogin(Map<String, Object> map){
         return sqlSessionTemplate.selectOne(NAMESPACE+"selectLogin",checkSha256(map));
+    }
+
+    public int selectLatestRound(){
+        return sqlSessionTemplate.selectOne(NAMESPACE+"selectLatestRound");
+    }
+
+    public List<Map<String, Object>> selectVoteResult(int round){
+        return sqlSessionTemplate.selectList(NAMESPACE+"selectVoteResult",round);
     }
 
 }
