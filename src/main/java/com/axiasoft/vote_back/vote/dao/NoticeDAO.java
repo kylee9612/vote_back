@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -16,7 +17,7 @@ public class NoticeDAO {
 
     public NoticeDAO(@Qualifier("sqlSessionTemplate") SqlSession sqlSession) {this.sqlSession = sqlSession;}
 
-    public Map<String , Object> getNoticeList (Map<String, Object> map){
-        return (Map<String, Object>) sqlSession.selectList(NAMESAPCE+ "getNoticeList", map);
+    public List<Map<String,Object>> getNoticeList (Map<String, Object> map){
+        return sqlSession.selectList(NAMESAPCE+ "getNoticeList", map);
     }
 }

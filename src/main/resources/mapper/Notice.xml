@@ -2,27 +2,30 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.axiasoft.vote_back.admin.dao">
+<mapper namespace="com.axiasoft.vote_back.notice.dao">
     <select id="getNoticeList" parameterType="hashmap" resultType="hashmap">
         SELECT
             *
         FROM
-            axia.Notice
+            axia.notice
         WHERE
             1=1
-
+        <if test="searchText !=null and searchText !='' ">
         AND
-        <if test="searchType != 1">
+        <if test="searchType != 1 and searchText !=null and searchText !='' ">
               nt_title LIKE '%#{searchText}%'
         </if>
-        <if test="searchType != 1 and searchType != 0">
+        <if test="searchType != 1 and searchType != 0 and searchText !=null and searchText !=''">
         OR
         </if>
-        <if test="searchType != 0">
+        <if test="searchType != 0 and searchText !=null and searchText !=''">
             nt_contents LIKE '%#{searchText}%'
         </if>
-        <if test="start_idx != null and !start_idx.equals('') and page_size != null and !page_size.equals('')">
-            LIMIT #{start_idx}, #{page_size}
         </if>
+<!--        <if test="start_idx != null and !start_idx.equals('') and page_size != null and !page_size.equals('')">-->
+<!--            LIMIT #{start_idx}, #{page_size}-->
+<!--        </if>-->
+        ORDER BY
+            NT_NO desc
     </select>
 </mapper>
