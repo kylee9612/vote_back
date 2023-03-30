@@ -18,13 +18,10 @@
     </select>
 
     <select id="selectVoteResult" parameterType="hashmap" resultType="hashmap">
-        SELECT a.vt_target,
-               (select count(b.vt_target)
-                from vote_result b
-                where b.vt_target = a.vt_target
-                  and b.vt_round = a.vt_round) as count
-        FROM axia.vote_result a
-        WHERE vt_round = 1
-        order by vt_target;
+        SELECT vt_round as round,
+               vt_target as coin_idx,
+               COUNT(*) OVER (PARTITION BY vt_target) as count
+        FROM axia.vote_result
+        ORDER BY vt_round, vt_target;
     </select>
 </mapper>

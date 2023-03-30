@@ -1,6 +1,8 @@
 package com.axiasoft.vote_back.admin.service;
 
 import com.axiasoft.vote_back.admin.dao.AdminDAO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.Map;
 
 @Service
 public class AdminService {
+
+    private static final Logger log = LogManager.getLogger(AdminService.class);
 
     @Autowired
     private AdminDAO adminDAO;
@@ -28,6 +32,7 @@ public class AdminService {
         for(int i = 1; i <= latestRound; i++){
             map.put(String.valueOf(i),adminDAO.selectVoteResult(i));
         }
+        log.info(map);
         return map;
     }
 }
