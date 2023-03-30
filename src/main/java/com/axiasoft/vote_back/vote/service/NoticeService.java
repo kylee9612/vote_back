@@ -8,8 +8,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -19,16 +21,9 @@ public class NoticeService {
     @Autowired
     private NoticeDAO noticeDAO;
 
-    public Map<String , Object> getNoticeList(HttpServletResponse response, HttpServletRequest request){
+    public List<Map<String,Object>> getNoticeList(Map<String, Object> map){
         log.info("---------------------------- get notice list ----------------------------");
-        Map<String, Object> ParamMap = new HashMap<>();
-
-        try {
-            noticeDAO.getNoticeList(ParamMap);
-        }catch (Exception e){
-            log.error(e);
-        }
-
-        return null;
+        return noticeDAO.getNoticeList(map);
     }
+
 }
