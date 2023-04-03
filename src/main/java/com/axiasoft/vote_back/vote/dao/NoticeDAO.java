@@ -17,6 +17,10 @@ public class NoticeDAO {
 
     public NoticeDAO(@Qualifier("sqlSessionTemplate") SqlSession sqlSession) {this.sqlSession = sqlSession;}
 
+    public int getNoticeListCount (Map<String, Object> map){
+        return (int)sqlSession.selectOne(NAMESAPCE+ "getNoticeListCount", map);
+    }
+
     public List<Map<String,Object>> getNoticeList (Map<String, Object> map){
         return sqlSession.selectList(NAMESAPCE+ "getNoticeList", map);
     }

@@ -1,9 +1,10 @@
 package com.axiasoft.vote_back.vote.controller;
 
+import com.axiasoft.vote_back.util.PageUtil;
 import com.axiasoft.vote_back.util.response.ApiResponse;
 import com.axiasoft.vote_back.util.response.CommonErrorCode;
+import com.axiasoft.vote_back.util.response.ErrorCode;
 import com.axiasoft.vote_back.vote.service.NoticeService;
-import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,18 +31,25 @@ public class NoticeController {
 
     @ManagedOperation(description = "Notice List 불러오기")
     @GetMapping("/getNoticeList")
-    public ResponseEntity<?> refreshToken(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> getNoticeList(@RequestParam Map<String, Object> paramMap ,HttpServletRequest request, HttpServletResponse response) {
+        Map <String,Object> returnMap = new HashMap<>();
         log.info("=============================START========================================== in " + request.getRequestURL());
-        int pageSize = 10 ;
         log.info("paramMap :::" + paramMap);
 
-        // 1. 그냥 들어왔을때
-        // 2. 페이지 이동
-        // 3-1 검색어 이동
-        // 3-2 검색어 이동 후 페이지 이동
+        Map<String , Integer > pageMap = PageUtil.curPage(paramMap);
+        paramMap.put("startNum", pageMap.get("startNum"));
+        paramMap.put("lastNum", pageMap.get("lastNum"));
 
+
+        int notiCount = noticeService.getNoticeListCount(paramMap);
+        int lastPage = PageUtil.getLastPage(notiCount);
+
+        // pageNation
         List<Map<String,Object>> noticeList = noticeService.getNoticeList(paramMap);
 
-        return ResponseEntity.ok(noticeList);
+        returnMap.put("lastPage" , lastPage);
+        returnMap.put("noticeList" , noticeList);
+        log.info("returnMap :: " + returnMap);
+        return ResponseEntity.ok(new ApiResponse(CommonErrorCode.CODE_0000,returnMap));
     }
 }

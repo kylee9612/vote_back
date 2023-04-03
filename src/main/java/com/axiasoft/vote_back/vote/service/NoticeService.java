@@ -21,9 +21,14 @@ public class NoticeService {
     @Autowired
     private NoticeDAO noticeDAO;
 
+    public int getNoticeListCount(Map<String, Object> map){
+        return  noticeDAO.getNoticeListCount(map);
+    }
     public List<Map<String,Object>> getNoticeList(Map<String, Object> map){
         log.info("---------------------------- get notice list ----------------------------");
         return noticeDAO.getNoticeList(map);
     }
+
+
 
 }
