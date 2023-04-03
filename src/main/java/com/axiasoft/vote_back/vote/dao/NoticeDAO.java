@@ -24,4 +24,8 @@ public class NoticeDAO {
     public List<Map<String,Object>> getNoticeList (Map<String, Object> map){
         return sqlSession.selectList(NAMESAPCE+ "getNoticeList", map);
     }
+
+    public void increaseViews(Map<String,Object> map){
+        sqlSession.update(NAMESAPCE+"increaseViews",map);
+    }
 }

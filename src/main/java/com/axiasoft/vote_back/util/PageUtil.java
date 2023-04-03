@@ -33,11 +33,15 @@ public class PageUtil {
 
     public static int getLastPage(int count){
         int lastPage = 0 ;
-
-        while(count > 0){
-            count -= 10;
-            lastPage++;
+        if(count != 0){
+            while(count > 0 ){
+                count -= 10;
+                lastPage++;
+            }
+        }else{
+            lastPage = 1;
         }
+
 
         return lastPage;
     }

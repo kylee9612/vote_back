@@ -36,7 +36,7 @@
            nt_no,
            nt_title,
            nt_contents,
-           nt_count,
+           nt_views,
            DATE_FORMAT(reg_date, '%Y-%m-%d') AS "reg_date"
         FROM
             axia.notice
@@ -65,4 +65,13 @@
             LIMIT #{startNum}, #{lastNum}
         </if>
     </select>
+
+    <update id="increaseViews" parameterType="hashmap" >
+        UPDATE
+            axia.notice
+        SET
+            nt_views = nt_views + 1
+        WHERE
+            nt_no = #{nt_no}
+    </update>
 </mapper>
