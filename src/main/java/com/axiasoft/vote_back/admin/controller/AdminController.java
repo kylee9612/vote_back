@@ -4,6 +4,7 @@ import com.axiasoft.vote_back.admin.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,5 +17,10 @@ public class AdminController {
     @PostMapping("/login")
     public Map<String, Object> checkLogin(@RequestBody Map<String, Object> map){
         return adminService.checkLogin(map);
+    }
+
+    @GetMapping("voteResult")
+    public Map<String, List<Map<String, Object>>> voteResult(){
+        return adminService.voteResult();
     }
 }

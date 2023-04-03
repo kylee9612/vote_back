@@ -9,4 +9,19 @@
         WHERE ad_id = #{ad_id}
         AND ad_pw = #{ad_password}
     </select>
+
+    <select id="selectLatestRound" resultType="int">
+        SELECT round
+        FROM axia.vote_round
+        ORDER BY round DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectVoteResult" parameterType="hashmap" resultType="hashmap">
+        SELECT vt_round as round,
+               vt_target as coin_idx,
+               COUNT(*) OVER (PARTITION BY vt_target) as count
+        FROM axia.vote_result
+        ORDER BY vt_round, vt_target;
+    </select>
 </mapper>
