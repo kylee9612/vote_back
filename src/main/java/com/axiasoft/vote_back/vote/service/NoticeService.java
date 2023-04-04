@@ -29,6 +29,8 @@ public class NoticeService {
         return noticeDAO.getNoticeList(map);
     }
 
-
+    public void increaseViews(Map<String,Object> map){
+        noticeDAO.increaseViews(map);
+    }
 
 }
