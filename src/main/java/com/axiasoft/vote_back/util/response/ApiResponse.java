@@ -26,6 +26,13 @@ public class ApiResponse<T> implements Serializable {
         this.data = null;
     }
 
+    public ApiResponse(Boolean success, T data, ErrorCode errorCode){
+        this.success = success;
+        this.data = data;
+        this.message = errorCode.getMsg();
+        this.code = errorCode.getCode();
+    }
+
     @Override
     public String toString() {
         if(this.data != null){
