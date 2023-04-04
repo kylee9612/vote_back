@@ -12,10 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jmx.export.annotation.ManagedOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -51,5 +48,12 @@ public class NoticeController {
         returnMap.put("noticeList" , noticeList);
         log.info("returnMap :: " + returnMap);
         return ResponseEntity.ok(new ApiResponse(CommonErrorCode.CODE_0000,returnMap));
+    }
+
+    @PostMapping("/increaseViews")
+    public void increaseViews(@RequestBody Map<String,Object> paramMap ,HttpServletRequest request, HttpServletResponse response){
+        log.info("=============================START========================================== in " + request.getRequestURL());
+        log.info("paramMap :::" + paramMap);
+        noticeService.increaseViews(paramMap);
     }
 }
