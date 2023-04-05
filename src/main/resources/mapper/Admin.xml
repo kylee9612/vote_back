@@ -17,11 +17,47 @@
         LIMIT 1
     </select>
 
+    <select id="selectStartRound" resultType="int">
+        SELECT round
+        FROM axia.vote_round
+        WHERE start_date > now()
+        ORDER BY round
+        LIMIT 1
+    </select>
+
     <select id="selectVoteResult" parameterType="hashmap" resultType="hashmap">
         SELECT vt_round as round,
                vt_target as coin_idx,
                COUNT(*) OVER (PARTITION BY vt_target) as count
         FROM axia.vote_result
+        WHERE vt_round = #{round}
         ORDER BY vt_round, vt_target;
     </select>
+
+    <select id="selectLatestVoteResult" resultType="hashmap">
+        SELECT vt_round as round,
+               vt_target as coin_idx,
+               COUNT(*) OVER (PARTITION BY vt_target) as count
+        FROM axia.vote_result
+        WHERE vt_round = (SELECT MAX(vt_round) FROM axia.vote_result)
+        ORDER BY vt_target
+    </select>
+    
+    <select id="selectCurrentRound" resultType="hashmap">
+        SELECT round
+        FROM axia.vote_round
+        WHERE now() between start_date and end_date
+    </select>
+
+    <insert id="insertCoin" parameterType="hashmap">
+        INSERT INTO coin_list
+            (coin_name, coin_info, coin_symbol,coin_pic,round_idx)
+            VALUES (
+                    #{coin_name},
+                    #{coin_info},
+                    #{coin_symbol},
+                    #{coin_pic}
+                    #{round}
+                   )
+    </insert>
 </mapper>

@@ -36,12 +36,10 @@ public class UserController {
 
     private final static Logger log = LogManager.getLogger(UserController.class);
 
-    @ManagedOperation(description = "1-2-2 JWT AccessToken 재발행 코드")
-    @GetMapping("/getAccessToken")
-    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
-        log.info("=============================START========================================== in " + request.getRequestURL());
-
-        return ResponseEntity.ok(new ApiResponse(CommonErrorCode.CODE_9999));
+    @GetMapping("/visitToken")
+    public ResponseEntity<?> createVisitToken(HttpServletRequest request){
+        ApiResponse apiResponse = jwtService.createVisitToken();
+        return ResponseEntity.ok(new ApiResponse(CommonErrorCode.CODE_0000));
     }
 
     @ManagedOperation(description = "JWT Access Token 재발행")

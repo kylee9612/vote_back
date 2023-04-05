@@ -90,6 +90,11 @@ public class JwtService {
         return new ApiResponse(CommonErrorCode.CODE_0000, new JwtAuthenticationResponse(null, AmlRefreshToken));
     }
 
+    public ApiResponse createVisitToken(){
+        String visitToken = jwtTokenProvider.createUserVisitToken();
+        return new ApiResponse(CommonErrorCode.CODE_0000, new JwtAuthenticationResponse(null, visitToken));
+    }
+
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
