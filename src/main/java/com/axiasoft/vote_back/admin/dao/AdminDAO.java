@@ -20,21 +20,21 @@ public class AdminDAO {
     private Set<String> sha256Set;
 
     @PostConstruct
-    private void init(){
+    private void init() {
         setSha256Set();
     }
 
-    private void setSha256Set(){
+    private void setSha256Set() {
         sha256Set = new HashSet<>();
         sha256Set.add("ad_pw");
     }
 
-    private Map<String, Object> checkSha256(Map<String, Object> map){
+    private Map<String, Object> checkSha256(Map<String, Object> map) {
         Map<String, Object> resultMap = new HashMap<>(map);
-        for(String key : sha256Set){
-            if(resultMap.containsKey(key)) {
+        for (String key : sha256Set) {
+            if (resultMap.containsKey(key)) {
                 String str = sha256Util.encrypt(resultMap.get(key).toString());
-                if(str != null)
+                if (str != null)
                     resultMap.put(key, str);
                 else
                     return null;
@@ -43,16 +43,31 @@ public class AdminDAO {
         return resultMap;
     }
 
-    public Map <String, Object> selectLogin(Map<String, Object> map){
-        return sqlSessionTemplate.selectOne(NAMESPACE+"selectLogin",checkSha256(map));
+    public Map<String, Object> selectLogin(Map<String, Object> map) {
+        return sqlSessionTemplate.selectOne(NAMESPACE + "selectLogin", checkSha256(map));
     }
 
-    public int selectLatestRound(){
-        return sqlSessionTemplate.selectOne(NAMESPACE+"selectLatestRound");
+    public int selectLatestRound() {
+        return sqlSessionTemplate.selectOne(NAMESPACE + "selectLatestRound");
     }
 
-    public List<Map<String, Object>> selectVoteResult(int round){
-        return sqlSessionTemplate.selectList(NAMESPACE+"selectVoteResult",round);
+    public int selectStartRound() {
+        return sqlSessionTemplate.selectOne(NAMESPACE + "selectsStartRound");
     }
 
+    public List<Map<String, Object>> selectVoteResult(int round) {
+        return sqlSessionTemplate.selectList(NAMESPACE + "selectVoteResult", round);
+    }
+
+    public List<Map<String, Object>> selectLatestVoteResult() {
+        return sqlSessionTemplate.selectList(NAMESPACE + "selectLatestVoteResult");
+    }
+
+    public List<Map<String, Object>> selectCurrentRound() {
+        return sqlSessionTemplate.selectList(NAMESPACE + "selectCurrentRound");
+    }
+
+    public int insertCoin(Map<String, Object> map) {
+        return sqlSessionTemplate.insert(NAMESPACE + "insertCoin", map);
+    }
 }
