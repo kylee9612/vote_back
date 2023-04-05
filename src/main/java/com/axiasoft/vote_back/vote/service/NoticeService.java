@@ -24,6 +24,10 @@ public class NoticeService {
     public int getNoticeListCount(Map<String, Object> map){
         return  noticeDAO.getNoticeListCount(map);
     }
+    public Map<String,Object> getNotice(Map<String, Object> map){
+        log.info("---------------------------- get notice ----------------------------");
+        return noticeDAO.getNotice(map);
+    }
     public List<Map<String,Object>> getNoticeList(Map<String, Object> map){
         log.info("---------------------------- get notice list ----------------------------");
         return noticeDAO.getNoticeList(map);

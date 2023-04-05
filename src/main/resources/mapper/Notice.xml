@@ -66,6 +66,22 @@
         </if>
     </select>
 
+    <select id="getNotice" parameterType="hashmap" resultType="hashmap">
+        SELECT
+            nt_no,
+            nt_title,
+            nt_contents,
+            nt_views,
+            DATE_FORMAT(reg_date, '%Y-%m-%d') AS "reg_date"
+        FROM
+            axia.notice
+        WHERE
+            1=1
+        AND
+            nt_no = #{nt_no}
+    </select>
+
+
     <update id="increaseViews" parameterType="hashmap" >
         UPDATE
             axia.notice
