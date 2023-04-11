@@ -25,12 +25,17 @@ public class NoticeService {
         return  noticeDAO.getNoticeListCount(map);
     }
     public Map<String,Object> getNotice(Map<String, Object> map){
-        log.info("---------------------------- get notice ----------------------------");
         return noticeDAO.getNotice(map);
     }
     public List<Map<String,Object>> getNoticeList(Map<String, Object> map){
-        log.info("---------------------------- get notice list ----------------------------");
         return noticeDAO.getNoticeList(map);
+    }
+
+    public void insertNotice(Map<String, Object> map){
+        noticeDAO.insertNotice(map);
+    }
+    public void updateNotice(Map<String, Object> map){
+        noticeDAO.updateNotice(map);
     }
 
     public void increaseViews(Map<String,Object> map){

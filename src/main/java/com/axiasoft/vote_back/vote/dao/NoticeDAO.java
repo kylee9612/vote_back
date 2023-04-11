@@ -29,6 +29,13 @@ public class NoticeDAO {
         sqlSession.update(NAMESAPCE+"increaseViews",map);
     }
 
+    public void insertNotice(Map<String,Object> map){
+        sqlSession.insert(NAMESAPCE+"insertNotice",map);
+    }
+    public void updateNotice(Map<String,Object> map){
+        sqlSession.update(NAMESAPCE+"updateNotice",map);
+    }
+
     public  Map<String , Object > getNotice (Map<String, Object> map){
         return sqlSession.selectOne(NAMESAPCE+"getNotice",map);
     }

@@ -54,9 +54,11 @@ public class NoticeController {
 
     @ManagedOperation(description = "Notice 불러오기")
     @PostMapping("/getNotice")
-    public ResponseEntity getNotice(@RequestParam Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity getNotice(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
+        log.info("=============================START========================================== in " + request.getRequestURL());
         Map<String, Object> returnMap = new HashMap<>();
         CommonErrorCode code = null;
+        log.info("paramMap :::" + paramMap);
         try {
             Map<String, Object> notice = noticeService.getNotice(paramMap);
             returnMap.put("notice", notice);
@@ -71,6 +73,32 @@ public class NoticeController {
     }
     /**-----------/SELECT-----------------------------------------------------------**/
     /**-----------INSERT-----------------------------------------------------------**/
+    @ManagedOperation(description = "Notice 저장")
+    @PostMapping("/editNotice")
+    public ResponseEntity editNotice(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
+        log.info("=============================START========================================== in " + request.getRequestURL());
+        Map<String, Object> returnMap = new HashMap<>();
+        CommonErrorCode code = null;
+        log.info("paramMap :::" + paramMap);
+        try {
+            if(paramMap.get("nt_no").equals("0")){
+                // 생성하기
+                noticeService.insertNotice(paramMap);
+                code = CommonErrorCode.CODE_1201;
+            }else{
+                // 업데이트 하기
+                noticeService.updateNotice(paramMap);
+                code = CommonErrorCode.CODE_1202;
+            }
+
+        } catch (Exception e) {
+            log.info(e);
+            code = CommonErrorCode.CODE_9999;
+        }
+
+        return ResponseEntity.ok(new ApiResponse(code, returnMap));
+
+    }
     /**-----------/INSERT-----------------------------------------------------------**/
     /**-----------UPDATE-----------------------------------------------------------**/
     @PostMapping("/increaseViews")

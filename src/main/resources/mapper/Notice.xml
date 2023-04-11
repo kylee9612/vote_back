@@ -81,12 +81,26 @@
             nt_no = #{nt_no}
     </select>
 
+    <insert id="insertNotice" parameterType="hashmap">
+        INSERT INTO
+            axia.notice (nt_title, nt_contents , reg_date)
+        VALUES (#{nt_title}, #{nt_contents} , NOW());
 
+    </insert>
     <update id="increaseViews" parameterType="hashmap" >
         UPDATE
             axia.notice
         SET
             nt_views = nt_views + 1
+        WHERE
+            nt_no = #{nt_no}
+    </update>
+    <update id="updateNotice" parameterType="hashmap" >
+        UPDATE
+            axia.notice
+        SET
+            nt_title = #{nt_title},
+            nt_contents = #{nt_contents}
         WHERE
             nt_no = #{nt_no}
     </update>
