@@ -26,7 +26,7 @@ public class AdminController {
         return ResponseEntity.ok(new ApiResponse<>(CommonErrorCode.CODE_0000, rtnMap));
     }
 
-    @GetMapping("/voteResult")
+    @GetMapping("/vote/results")
     public ResponseEntity<?> voteResult(){
         Map<String, List<Map<String, Object>>> rtnMap = adminService.voteResult();
         return ResponseEntity.ok(new ApiResponse<>(CommonErrorCode.CODE_0000,rtnMap));
@@ -39,14 +39,14 @@ public class AdminController {
         return ResponseEntity.ok(new ApiResponse<>(CommonErrorCode.CODE_0000,returnMap));
     }
 
-    @GetMapping("/addCoin")
-    public ResponseEntity<?> addCoinPage(){
+    @GetMapping("/coins")
+    public ResponseEntity<?> getCoinPage(){
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("roundList",adminService.currentRound());
+        returnMap.put("roundList",adminService.unfinishedRound());
         return ResponseEntity.ok(new ApiResponse<>(CommonErrorCode.CODE_0000,returnMap));
     }
 
-    @PostMapping("/addCoin")
+    @PostMapping("/coins")
     public ResponseEntity<?> addCoin(@RequestParam(value = "coin_pic_list", required = false) List<MultipartFile> file,
                                      @RequestParam Map<String,Object> map){
         return ResponseEntity.ok(adminService.addCoin(map,file));
