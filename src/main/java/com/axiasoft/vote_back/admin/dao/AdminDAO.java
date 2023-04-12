@@ -52,7 +52,7 @@ public class AdminDAO {
     }
 
     public int selectStartRound() {
-        return sqlSessionTemplate.selectOne(NAMESPACE + "selectsStartRound");
+        return sqlSessionTemplate.selectOne(NAMESPACE + "selectStartRound");
     }
 
     public List<Map<String, Object>> selectVoteResult(int round) {
@@ -69,5 +69,8 @@ public class AdminDAO {
 
     public int insertCoin(Map<String, Object> map) {
         return sqlSessionTemplate.insert(NAMESPACE + "insertCoin", map);
+    }
+    public int insertCoinPicture(Map<String, Object> map){
+        return sqlSessionTemplate.insert(NAMESPACE+"insertCoinPicture",map);
     }
 }

@@ -47,7 +47,8 @@ public class AdminController {
     }
 
     @PostMapping("/addCoin")
-    public ResponseEntity<?> addCoin(@Nullable @RequestParam("coin_pic[]") List<MultipartFile> file, @RequestParam Map<String,Object> map){
+    public ResponseEntity<?> addCoin(@RequestParam(value = "coin_pic_list", required = false) List<MultipartFile> file,
+                                     @RequestParam Map<String,Object> map){
         return ResponseEntity.ok(adminService.addCoin(map,file));
     }
 }

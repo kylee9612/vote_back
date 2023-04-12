@@ -26,21 +26,23 @@
     </select>
 
     <select id="selectVoteResult" parameterType="hashmap" resultType="hashmap">
-        SELECT vt_round as round,
-               vt_target as coin_idx,
-               COUNT(*) OVER (PARTITION BY vt_target) as count
-        FROM axia.vote_result
-        WHERE vt_round = #{round}
-        ORDER BY vt_round, vt_target;
+        SELECT vr.vote_round as round,
+               cl.coin_name as coin_name,
+               COUNT(*) OVER (PARTITION BY vr.vote_target) as count
+        FROM axia.vote_result vr
+        INNER JOIN axia.coin_list cl
+        ON vr.vote_target = cl.coin_idx
+        WHERE vr.vote_round = #{round}
+        ORDER BY vr.vote_round, vr.vote_target;
     </select>
 
     <select id="selectLatestVoteResult" resultType="hashmap">
-        SELECT vt_round as round,
-               vt_target as coin_idx,
-               COUNT(*) OVER (PARTITION BY vt_target) as count
+        SELECT vote_round as round,
+               vote_target as coin_idx,
+               COUNT(*) OVER (PARTITION BY vote_target) as count
         FROM axia.vote_result
-        WHERE vt_round = (SELECT MAX(vt_round) FROM axia.vote_result)
-        ORDER BY vt_target
+        WHERE vote_round = (SELECT MAX(vote_round) FROM axia.vote_result)
+        ORDER BY vote_target
     </select>
     
     <select id="selectCurrentRound" resultType="hashmap">
@@ -49,15 +51,21 @@
         WHERE now() between start_date and end_date
     </select>
 
-    <insert id="insertCoin" parameterType="hashmap">
-        INSERT INTO coin_list
-            (coin_name, coin_info, coin_symbol,coin_pic,round_idx)
-            VALUES (
-                    #{coin_name},
+    <insert id="insertCoin" parameterType="hashmap" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO axia.coin_list
+            (coin_name,
+             coin_info,
+             coin_symbol,
+             vote_round,
+             ad_idx)
+            VALUES (#{coin_name},
                     #{coin_info},
                     #{coin_symbol},
-                    #{coin_pic}
-                    #{round}
-                   )
+                    #{round},
+                    1)
+    </insert>
+    <insert id="insertCoinPicture" parameterType="hashmap">
+        INSERT INTO axia.coin_pic
+        VALUES (#{coin_idx}, #{picture}, #{order_idx})
     </insert>
 </mapper>
