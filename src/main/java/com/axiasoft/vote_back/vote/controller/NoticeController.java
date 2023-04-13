@@ -13,10 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/notice")
@@ -26,7 +25,9 @@ public class NoticeController {
     @Autowired
     private NoticeService noticeService;
 
-    /**-----------SELECT-----------------------------------------------------------**/
+    /**
+     * -----------SELECT-----------------------------------------------------------
+     **/
 
     @ManagedOperation(description = "Notice List 불러오기")
     @GetMapping("/getNoticeList")
@@ -35,10 +36,7 @@ public class NoticeController {
         log.info("=============================START========================================== in " + request.getRequestURL());
         log.info("paramMap :::" + paramMap);
 
-        Map<String, Integer> pageMap = PageUtil.curPage(paramMap);
-        paramMap.put("startNum", pageMap.get("startNum"));
-        paramMap.put("lastNum", pageMap.get("lastNum"));
-
+        paramMap = PageUtil.curPage(paramMap);
 
         int notiCount = noticeService.getNoticeListCount(paramMap);
         int lastPage = PageUtil.getLastPage(notiCount);
@@ -68,44 +66,19 @@ public class NoticeController {
             code = CommonErrorCode.CODE_9999;
         }
 
-        return ResponseEntity.ok(new ApiResponse(code, returnMap));
+        return ResponseEntity.ok(new ApiResponse<>(code, returnMap));
 
     }
-    /**-----------/SELECT-----------------------------------------------------------**/
-    /**-----------INSERT-----------------------------------------------------------**/
     @ManagedOperation(description = "Notice 저장")
     @PostMapping("/editNotice")
-    public ResponseEntity editNotice(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
-        log.info("=============================START========================================== in " + request.getRequestURL());
-        Map<String, Object> returnMap = new HashMap<>();
-        CommonErrorCode code = null;
-        log.info("paramMap :::" + paramMap);
-        try {
-            if(paramMap.get("nt_no").equals("0")){
-                // 생성하기
-                noticeService.insertNotice(paramMap);
-                code = CommonErrorCode.CODE_1201;
-            }else{
-                // 업데이트 하기
-                noticeService.updateNotice(paramMap);
-                code = CommonErrorCode.CODE_1202;
-            }
-
-        } catch (Exception e) {
-            log.info(e);
-            code = CommonErrorCode.CODE_9999;
-        }
-
-        return ResponseEntity.ok(new ApiResponse(code, returnMap));
-
+    public ResponseEntity<?> editNotice(@RequestPart(value = "notice_pic_list", required = false) List<MultipartFile> file,
+                                        @RequestParam Map<String, Object> paramMap) {
+        return ResponseEntity.ok(noticeService.editNotice(paramMap,file));
     }
-    /**-----------/INSERT-----------------------------------------------------------**/
-    /**-----------UPDATE-----------------------------------------------------------**/
     @PostMapping("/increaseViews")
     public void increaseViews(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
         log.info("=============================START========================================== in " + request.getRequestURL());
         log.info("paramMap :::" + paramMap);
         noticeService.increaseViews(paramMap);
     }
-    /**-----------/UPDATE-----------------------------------------------------------**/
 }
