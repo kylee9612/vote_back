@@ -84,6 +84,15 @@ public class AdminService {
         return list;
     }
 
+    public List<String> unfinishedRound() {
+        List<Map<String, Object>> rtnMap = adminDAO.selectUnfinishedRound();
+        List<String> list = new ArrayList<>();
+        for (Map<String, Object> map : rtnMap) {
+            list.add(map.get("round").toString());
+        }
+        return list;
+    }
+
     private boolean addCoinPicture(List<MultipartFile> fileList, int coinIdx) {
         Map<String, Object> map = new HashMap<>();
         map.put("coin_idx", coinIdx);

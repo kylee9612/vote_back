@@ -25,6 +25,18 @@
         LIMIT 1
     </select>
 
+    <select id="selectCurrentRound" resultType="hashmap">
+        SELECT round
+        FROM axia.vote_round
+        WHERE now() between start_date and end_date
+    </select>
+
+    <select id="selectUnfinishedRound" resultType="hashmap">
+        SELECT round
+        FROM axia.vote_round
+        WHERE end_date >= now()
+    </select>
+
     <select id="selectVoteResult" parameterType="hashmap" resultType="hashmap">
         SELECT vr.vote_round as round,
                cl.coin_name as coin_name,
@@ -43,12 +55,6 @@
         FROM axia.vote_result
         WHERE vote_round = (SELECT MAX(vote_round) FROM axia.vote_result)
         ORDER BY vote_target
-    </select>
-    
-    <select id="selectCurrentRound" resultType="hashmap">
-        SELECT round
-        FROM axia.vote_round
-        WHERE now() between start_date and end_date
     </select>
 
     <insert id="insertCoin" parameterType="hashmap" useGeneratedKeys="true" keyProperty="id">
