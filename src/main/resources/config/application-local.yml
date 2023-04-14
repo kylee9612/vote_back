@@ -17,3 +17,5 @@ jwt:
       expirationInMinute: 30
     refreshToken:
       expirationInMinute: 720
+    visitToken:
+      expiration: 720

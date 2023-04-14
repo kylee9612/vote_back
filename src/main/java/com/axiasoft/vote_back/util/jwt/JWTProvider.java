@@ -25,9 +25,14 @@ public class JWTProvider {
     @Value("${jwt.user.refreshToken.expirationInMinute}")
     private int userRefreshTokenExpiration;
 
+    @Value("${jwt.user.visitToken.expiration}")
+    private int userVisitTokenExpiration;
+
     private static final String JWT_TYPE = "jwtType";
     private static final String REFRESH_TYPE = "refresh";
     private static final String ACCESS_TYPE = "access";
+
+    private static final String VISIT_TYPE = "visit";
     private static final String SECOND_LOGIN_TYPE = "second_login";
 
     private static final String USER_NAME = "user_name";
@@ -54,16 +59,21 @@ public class JWTProvider {
         return generateToken(jwtMap, REFRESH_TYPE, userRefreshTokenExpiration);
     }
 
-    private String generateToken(Map<String, Object> jwtMap, String jwtType, int tokenExpirationInMinute) {
+    public String createUserVisitToken() {
+        return generateToken(null, VISIT_TYPE, userVisitTokenExpiration);
+    }
 
+    private String generateToken(Map<String, Object> jwtMap, String jwtType, int tokenExpirationInMinute) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + (tokenExpirationInMinute * 1000 * 60));
         HashMap claims = new HashMap<>();
-        claims.put(JWT_TYPE,jwtType);
-        claims.put(USER_NAME,jwtMap.get(USER_NAME));
-        claims.put(USER_PHONE,jwtMap.get(USER_PHONE));
-        claims.put(USER_BIRTHDAY, jwtMap.get(USER_BIRTHDAY));
-        claims.put(SECOND_LOGIN_TYPE,jwtMap.get(SECOND_LOGIN_TYPE));
+        claims.put(JWT_TYPE, jwtType);
+        if (jwtMap != null) {
+            claims.put(USER_NAME, jwtMap.get(USER_NAME));
+            claims.put(USER_PHONE, jwtMap.get(USER_PHONE));
+            claims.put(USER_BIRTHDAY, jwtMap.get(USER_BIRTHDAY));
+            claims.put(SECOND_LOGIN_TYPE, jwtMap.get(SECOND_LOGIN_TYPE));
+        }
 
         // 암호화 위치
         String jwtToken = Jwts.builder()
@@ -83,24 +93,24 @@ public class JWTProvider {
         jwtTokenValidation.setSuccess(false);
         jwtTokenValidation.setCode(UserErrorCode.CODE_1103);
 
-        if(authToken == null){
+        if (authToken == null) {
             jwtTokenValidation.setCode(UserErrorCode.CODE_1104);
             return jwtTokenValidation;
         }
 
         try {
 
-            Jws<Claims> claims= Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             jwtTokenValidation.setSuccess(true);
             jwtTokenValidation.setCode(null);
 
-            if(claims.getBody().get(JWT_TYPE).toString().equalsIgnoreCase(ACCESS_TYPE)){
+            if (claims.getBody().get(JWT_TYPE).toString().equalsIgnoreCase(ACCESS_TYPE)) {
                 jwtTokenValidation.setAccessToken(true);
-            }else if(claims.getBody().get(JWT_TYPE).toString().equalsIgnoreCase(REFRESH_TYPE)){
+            } else if (claims.getBody().get(JWT_TYPE).toString().equalsIgnoreCase(REFRESH_TYPE)) {
                 jwtTokenValidation.setRefreshToken(true);
             }
 
-            if(claims.getBody().get(SECOND_LOGIN_TYPE).toString().equalsIgnoreCase("N")) {
+            if (claims.getBody().get(SECOND_LOGIN_TYPE).toString().equalsIgnoreCase("N")) {
                 jwtTokenValidation.setCode(UserErrorCode.CODE_9994);
                 jwtTokenValidation.setSuccess(false);
                 return jwtTokenValidation;
@@ -126,7 +136,7 @@ public class JWTProvider {
 
     public Map<String, Object> getJwtInfoRefresh(String token) {
         try {
-            Jws<Claims> claims= Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             Map<String, Object> expectedMap = new HashMap<>(claims.getBody());
             return expectedMap;
         } catch (Exception e) {
@@ -139,7 +149,7 @@ public class JWTProvider {
         try {
             token = new String(SEED_KISA.DECRYPT(token));
             token = token.trim();
-            Jws<Claims> claims= Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             Map<String, Object> expectedMap = new HashMap<>(claims.getBody());
             return expectedMap;
         } catch (Exception e) {
@@ -159,7 +169,7 @@ public class JWTProvider {
         token = new String(SEED_KISA.DECRYPT(token));
         token = token.trim();
         try {
-            Jws<Claims> claims= Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             Map<String, Object> expectedMap = new HashMap<>(claims.getBody());
             return expectedMap;
         } catch (Exception e) {
