@@ -62,4 +62,5 @@ public class DatabaseConfig {
     public PlatformTransactionManager txManager() {
         return new DataSourceTransactionManager(dataSource(hikariConfig()));
     }
+
 }
