@@ -20,7 +20,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/notice")
 public class NoticeController {
-    private final static Logger log = LogManager.getLogger(UserController.class);
+    private final static Logger log = LogManager.getLogger(NoticeController.class);
 
     @Autowired
     private NoticeService noticeService;
@@ -58,13 +58,13 @@ public class NoticeController {
         CommonErrorCode code = null;
         log.info("paramMap :::" + paramMap);
         try {
-            Map<String, Object> notice = noticeService.getNotice(paramMap);
-            returnMap.put("notice", notice);
+            returnMap = noticeService.getNotice(paramMap);
             code = CommonErrorCode.CODE_0000;
         } catch (Exception e) {
             log.info(e);
             code = CommonErrorCode.CODE_9999;
         }
+        log.info("returnMap :::" + returnMap);
 
         return ResponseEntity.ok(new ApiResponse<>(code, returnMap));
 
@@ -81,4 +81,11 @@ public class NoticeController {
         log.info("paramMap :::" + paramMap);
         noticeService.increaseViews(paramMap);
     }
+    @PostMapping("/deleteNoticeImage")
+    public void deleteNoticeImage(@RequestBody Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
+        log.info("=============================START========================================== in " + request.getRequestURL());
+        log.info("paramMap :::" + paramMap);
+        noticeService.deleteNoticeImage(paramMap);
+    }
+
 }

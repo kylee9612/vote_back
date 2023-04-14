@@ -16,13 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.*;
 
 @Service
 public class NoticeService {
-    private final static Logger log = LogManager.getLogger(UserService.class);
+    private final static Logger log = LogManager.getLogger(NoticeService.class);
 
     @Autowired
     private NoticeDAO noticeDAO;
@@ -33,14 +38,29 @@ public class NoticeService {
         return  noticeDAO.getNoticeListCount(map);
     }
     // 공지사항 1개
-    public Map<String,Object> getNotice(Map<String, Object> map){
-        return noticeDAO.getNotice(map);
+    public HashMap<String,Object> getNotice(Map<String, Object> map) throws SQLException, IOException {
+        HashMap<String, Object> result = new HashMap<>();
+        Map<String, Object> notice = noticeDAO.getNotice(map);
+        List<Map<String, Object>> noticePictures = noticeDAO.getNoticePicture(map);
+//        blobToImage(noticePictures);
+        result.put("noticePictures", noticePictures);
+        result.put("notice", notice);
+        return result;
     }
+//    private void blobToImage(List<Map<String, Object>> list) throws SQLException, IOException {
+//        for(int i =0 ; i < list.size() ; i ++){
+//            byte[] byteData = (byte[])list.get(i).get("picture");
+//            ByteArrayInputStream bis = new ByteArrayInputStream(byteData);
+//            BufferedImage image = ImageIO.read(bis);
+//            list.get(i).put("picture",image);
+//        }
+//        log.info("success!!!");
+//    }
     // 공지사항 리스트
     public List<Map<String,Object>> getNoticeList(Map<String, Object> map){
         return noticeDAO.getNoticeList(map);
     }
-    public ResponseEntity<?> editNotice(Map<String, Object> map , @Nullable List<MultipartFile> fileList){
+    public ApiResponse<?> editNotice(Map<String, Object> map , @Nullable List<MultipartFile> fileList){
         log.info("edit Notice Start");
         log.info("paramMap :::" + map);
         log.info("notice_pic_list :::" + fileList);
@@ -48,6 +68,10 @@ public class NoticeService {
         Map<String, Object> returnMap = new HashMap<>();
 
         CommonErrorCode code = null;
+
+        for (MultipartFile file : Objects.requireNonNull(fileList)) {
+            log.info(file.getOriginalFilename());
+        }
         try {
             if (map.get("nt_no").equals("0")) {
                 // 생성하기
@@ -58,13 +82,13 @@ public class NoticeService {
                 noticeDAO.updateNotice(map);
                 code = CommonErrorCode.CODE_1202;
             }
-
         } catch (Exception e) {
             log.info(e);
-            code = CommonErrorCode.CODE_9999;
+            return new ApiResponse<>(CommonErrorCode.CODE_9999);
         }
+        int idx = Integer.parseInt(map.get("nt_no").toString());
         log.info("edit Notice End");
-        return ResponseEntity.ok(new ApiResponse(code, returnMap));
+        return new ApiResponse<>(addNoticePicture(fileList,idx) ? code : CommonErrorCode.CODE_9999, map);
     }
     // 공지사항 생성
     @Transactional
@@ -79,6 +103,44 @@ public class NoticeService {
     // 뷰 카운트 업데이트
     public void increaseViews(Map<String,Object> map){
         noticeDAO.increaseViews(map);
+    }
+
+    // DB이미지 삭제 후 순서 재 설정
+    public void deleteNoticeImage(Map<String,Object> map){
+        int truee = noticeDAO.getNoticeImageCount(map);
+        log.info("truee : "+ truee);
+        if(truee >= 1){
+            try{
+                noticeDAO.deleteNoticeImage(map);
+            }catch (Exception e){
+                log.info(e);
+            }
+
+            try{
+                noticeDAO.updateIdAfterDelete(map);
+            }catch (Exception e){
+                log.info(e);
+            }
+
+        }
+    }
+
+    private boolean addNoticePicture(List<MultipartFile> fileList, int noticeIdx) {
+        log.info("addNoticePicture");
+        Map<String, Object> map = new HashMap<>();
+        map.put("nt_no", noticeIdx);
+        try {
+            for (int i = 0; i < fileList.size(); i++) {
+                map.put("order_idx", i);
+                map.put("picture", fileList.get(i).getBytes());
+                noticeDAO.insertNoticePicture(map);
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return false;
+        }
+        log.info("addNoticePicture end");
+        return true;
     }
 
 }

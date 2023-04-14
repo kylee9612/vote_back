@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.axiasoft.vote_back.notice.dao">
-    <select id="getNoticeListCount" parameterType="hashmap" resultType="int">
+    <select id="selectNoticeListCount" parameterType="hashmap" resultType="int">
         SELECT
         count(nt_no)
         FROM
@@ -30,8 +30,18 @@
         ORDER BY
         NT_NO desc
     </select>
+    <select id="selectNoticeImageCount" parameterType="hashmap" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            axia.notice_pic
+        WHERE
+            nt_no = #{nt_no}
+        AND
+            order_idx = #{order_idx}
+    </select>
 
-    <select id="getNoticeList" parameterType="hashmap" resultType="hashmap">
+    <select id="selectNoticeList" parameterType="hashmap" resultType="hashmap">
         SELECT
            nt_no,
            nt_title,
@@ -65,8 +75,18 @@
             LIMIT #{startNum}, #{lastNum}
         </if>
     </select>
+    <select id="selectNoticePictures" parameterType="hashmap" resultType="hashmap">
+        SELECT
+            *
+        FROM
+            axia.notice_pic
+        WHERE
+            nt_no = #{nt_no}
+        ORDER BY
+            order_idx asc
+    </select>
 
-    <select id="getNotice" parameterType="hashmap" resultType="hashmap">
+    <select id="selectNotice" parameterType="hashmap" resultType="hashmap">
         SELECT
             nt_no,
             nt_title,
@@ -87,6 +107,12 @@
         VALUES (#{nt_title}, #{nt_contents} , NOW());
 
     </insert>
+
+    <insert id="insertNoticePicture" parameterType="hashmap">
+        INSERT INTO axia.notice_pic
+        VALUES (#{nt_no}, #{picture}, #{order_idx})
+    </insert>
+
     <update id="increaseViews" parameterType="hashmap" >
         UPDATE
             axia.notice
@@ -104,4 +130,22 @@
         WHERE
             nt_no = #{nt_no}
     </update>
+    <update id="updateIdAfterDelete" parameterType="hashmap">
+        UPDATE
+            axia.notice_pic
+        SET
+            nt_no = nt_no - 1
+        WHERE
+            nt_no = #{nt_no}
+          AND
+            order_idx > #{order_idx}
+    </update>
+    <delete id="deleteNoticeImage" parameterType="hashmap" >
+        DELETE FROM 
+                   axia.notice_pic  
+        WHERE 
+            nt_no = #{nt_no} 
+        AND 
+            order_idx = #{order_idx}
+    </delete>
 </mapper>
