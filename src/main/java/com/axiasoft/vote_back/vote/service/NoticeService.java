@@ -129,9 +129,10 @@ public class NoticeService {
         log.info("addNoticePicture");
         Map<String, Object> map = new HashMap<>();
         map.put("nt_no", noticeIdx);
+        int order_idx = noticeDAO.getNoticePictureLastOrderIdx(map);
         try {
             for (int i = 0; i < fileList.size(); i++) {
-                map.put("order_idx", i);
+                map.put("order_idx", i+order_idx);
                 map.put("picture", fileList.get(i).getBytes());
                 noticeDAO.insertNoticePicture(map);
             }

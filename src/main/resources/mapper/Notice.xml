@@ -40,6 +40,16 @@
         AND
             order_idx = #{order_idx}
     </select>
+    <select id="getNoticePictureLastOrderIdx" parameterType="hashmap" resultType="int">
+        SELECT
+            order_idx
+        FROM
+            axia.notice_pic
+        WHERE
+            nt_no = #{nt_no}
+        order by
+            order_idx desc
+    </select>
 
     <select id="selectNoticeList" parameterType="hashmap" resultType="hashmap">
         SELECT

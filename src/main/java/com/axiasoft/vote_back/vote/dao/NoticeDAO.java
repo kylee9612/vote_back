@@ -16,10 +16,10 @@ public class NoticeDAO {
     private final SqlSession sqlSession;
 
     public NoticeDAO(@Qualifier("sqlSessionTemplate") SqlSession sqlSession) {this.sqlSession = sqlSession;}
-
     public void insertNotice(Map<String,Object> map){sqlSession.insert(NAMESPACE+"insertNotice",map);}
     public int insertNoticePicture(Map<String, Object> map){return (int)sqlSession.insert(NAMESPACE+"insertNoticePicture",map);}
     public int getNoticeListCount (Map<String, Object> map){return (int)sqlSession.selectOne(NAMESPACE+ "selectNoticeListCount", map);}
+    public int getNoticePictureLastOrderIdx (Map<String, Object> map){return (int)sqlSession.selectOne(NAMESPACE+ "getNoticePictureLastOrderIdx", map);}
     public List<Map<String,Object>> getNoticeList (Map<String, Object> map){return sqlSession.selectList(NAMESPACE+ "selectNoticeList", map);}
     public List<Map<String,Object>> getNoticePicture(Map<String, Object> map){return sqlSession.selectList(NAMESPACE+"selectNoticePictures",map);}
     public int getNoticeImageCount(Map<String, Object> map){return sqlSession.selectOne(NAMESPACE+"selectNoticeImageCount",map);}
