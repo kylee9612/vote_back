@@ -11,9 +11,9 @@ public class PageUtil {
 
     private final static Logger log = LogManager.getLogger(UserController.class);
 
-    public static Map<String, Integer> curPage(Map<String, Object> map) {
+    public static Map<String, Object> curPage(Map<String, Object> map) {
 
-        Map<String, Integer> returnMap = new HashMap<>();
+        Map<String, Object> returnMap = new HashMap<>();
 
         try {
             if (map.containsKey("curPage")) {

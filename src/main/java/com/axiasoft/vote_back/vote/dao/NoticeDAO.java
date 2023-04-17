@@ -11,32 +11,23 @@ import java.util.Map;
 
 @Repository
 public class NoticeDAO {
-    private static final Logger log = LogManager.getLogger(JwtDAO.class);
-    private static final String NAMESAPCE="com.axiasoft.vote_back.notice.dao.";
+    private static final Logger log = LogManager.getLogger(NoticeDAO.class);
+    private static final String NAMESPACE="com.axiasoft.vote_back.notice.dao.";
     private final SqlSession sqlSession;
 
     public NoticeDAO(@Qualifier("sqlSessionTemplate") SqlSession sqlSession) {this.sqlSession = sqlSession;}
+    public void insertNotice(Map<String,Object> map){sqlSession.insert(NAMESPACE+"insertNotice",map);}
+    public int insertNoticePicture(Map<String, Object> map){return (int)sqlSession.insert(NAMESPACE+"insertNoticePicture",map);}
+    public int getNoticeListCount (Map<String, Object> map){return (int)sqlSession.selectOne(NAMESPACE+ "selectNoticeListCount", map);}
+    public int getNoticePictureLastOrderIdx (Map<String, Object> map){return (int)sqlSession.selectOne(NAMESPACE+ "getNoticePictureLastOrderIdx", map);}
+    public List<Map<String,Object>> getNoticeList (Map<String, Object> map){return sqlSession.selectList(NAMESPACE+ "selectNoticeList", map);}
+    public List<Map<String,Object>> getNoticePicture(Map<String, Object> map){return sqlSession.selectList(NAMESPACE+"selectNoticePictures",map);}
+    public int getNoticeImageCount(Map<String, Object> map){return sqlSession.selectOne(NAMESPACE+"selectNoticeImageCount",map);}
+    public  Map<String , Object > getNotice (Map<String, Object> map){return sqlSession.selectOne(NAMESPACE+"selectNotice",map);}
 
-    public int getNoticeListCount (Map<String, Object> map){
-        return (int)sqlSession.selectOne(NAMESAPCE+ "getNoticeListCount", map);
-    }
+    public void increaseViews(Map<String,Object> map){sqlSession.update(NAMESPACE+"increaseViews",map);}
+    public void updateNotice(Map<String,Object> map){sqlSession.update(NAMESPACE+"updateNotice",map);}
+    public void updateIdAfterDelete(Map<String,Object> map){sqlSession.update(NAMESPACE+"updateIdAfterDelete",map);}
 
-    public List<Map<String,Object>> getNoticeList (Map<String, Object> map){
-        return sqlSession.selectList(NAMESAPCE+ "getNoticeList", map);
-    }
-
-    public void increaseViews(Map<String,Object> map){
-        sqlSession.update(NAMESAPCE+"increaseViews",map);
-    }
-
-    public void insertNotice(Map<String,Object> map){
-        sqlSession.insert(NAMESAPCE+"insertNotice",map);
-    }
-    public void updateNotice(Map<String,Object> map){
-        sqlSession.update(NAMESAPCE+"updateNotice",map);
-    }
-
-    public  Map<String , Object > getNotice (Map<String, Object> map){
-        return sqlSession.selectOne(NAMESAPCE+"getNotice",map);
-    }
+    public void deleteNoticeImage(Map<String,Object> map){sqlSession.delete(NAMESPACE+"deleteNoticeImage",map);}
 }
