@@ -31,5 +31,14 @@ public class VoteDAO {
         return voteList;
     }
 
+    public List<Map<String, Object>> getCoinList(Map<String, Object> map){
+        List<Map<String, Object>> coinList = sqlSession.selectList(NAMESPACE + "getCoinList",map.get("round"));
+        return coinList;
+    }
+
+    public List<Map<String, Object>> getPicList(Map<String, Object> map){
+        List<Map<String, Object>> picList = sqlSession.selectList(NAMESPACE + "getCoinImg",map);
+        return picList;
+    }
 
 }

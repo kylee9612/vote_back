@@ -3,8 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.axiasoft.vote_back.vote.dao">
-    <select id="selectVoteList" parameterType="hashmap" resultType="hashmap">
+
+    <select id="selectVoteList" resultType="hashmap">
         SELECT *
         FROM axia.vote_round
+    </select>
+
+    <select id="getCoinList" parameterType = "hashmap" resultType="hashmap">
+        SELECT *
+        FROM axia.coin_list
+        WHERE vote_round = #{round}
+    </select>
+
+    <select id ="getCoinImg" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+        FROM axia.coin_pic
+        WHERE coin_idx = #{coin_idx}
+        ORDER BY order_idx
     </select>
 </mapper>
