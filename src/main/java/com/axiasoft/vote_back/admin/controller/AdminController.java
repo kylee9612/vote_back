@@ -51,4 +51,10 @@ public class AdminController {
                                      @RequestParam Map<String,Object> map){
         return ResponseEntity.ok(adminService.addCoin(map,file));
     }
+
+    @PostMapping("/addAdmin")
+    public ResponseEntity<?> addAdmin(@RequestParam(value = "coin_pic_list", required = false) List<MultipartFile> file,
+                                      @RequestParam Map<String,Object> map){
+        return ResponseEntity.ok(adminService.addCoin(map,file));
+    }
 }
