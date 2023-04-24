@@ -71,6 +71,13 @@ public class AdminDAO {
         return sqlSessionTemplate.selectList(NAMESPACE + "selectUnfinishedRound");
     }
 
+    public int getAdminListCount (Map<String, Object> map){
+        return (int)sqlSessionTemplate.selectOne(NAMESPACE+ "selectAdminListCount", map);
+    }
+    public List<Map<String,Object>> getNoticeList (Map<String, Object> map){
+        return sqlSessionTemplate.selectList(NAMESPACE+ "selectNoticeList", map);
+    }
+
     public int insertCoin(Map<String, Object> map) {
         return sqlSessionTemplate.insert(NAMESPACE + "insertCoin", map);
     }

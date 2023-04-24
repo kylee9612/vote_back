@@ -3,6 +3,65 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.axiasoft.vote_back.admin.dao">
+    <select id="selectAdminListCount" parameterType="hashmap" resultType="int">
+        SELECT
+        count(*)
+        FROM
+        axia.admin A
+        INNER JOIN axia.admin_detail AD
+        WHERE
+        1=1
+        <if test="searchText !=null and searchText !='' ">
+            AND
+            <if test="searchType = 0 ">
+                A.ad_id LIKE '%${searchText}%'
+            </if>
+
+            <if test="searchType = 1 ">
+                AD.ad_name LIKE '%${searchText}%'
+            </if>
+
+            <if test="searchType = 2 ">
+                AD.ad_phone LIKE '%${searchText}%'
+            </if>
+        </if>
+
+        ORDER BY
+        A.ad_idx desc
+    </select>
+
+    <select id="selectNoticeList" parameterType="hashmap" resultType="hashmap">
+        SELECT
+        count(*)
+        FROM
+        axia.admin A
+        INNER JOIN axia.admin_detail AD
+        WHERE
+        1=1
+        <if test="searchText !=null and searchText !='' ">
+            AND
+            <if test="searchType = 0 ">
+                A.ad_id LIKE '%${searchText}%'
+            </if>
+
+            <if test="searchType = 1 ">
+                AD.ad_name LIKE '%${searchText}%'
+            </if>
+
+            <if test="searchType = 2 ">
+                AD.ad_phone LIKE '%${searchText}%'
+            </if>
+        </if>
+
+        ORDER BY
+        A.ad_idx desc
+
+        <if test="startNum != null and !startNum.equals('') and lastNum != null and !lastNum.equals('')">
+            LIMIT #{startNum}, #{lastNum}
+        </if>
+    </select>
+
+
     <select id="selectLogin" parameterType="hashmap" resultType="hashmap">
         SELECT *
         FROM axia.admin

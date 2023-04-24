@@ -110,10 +110,17 @@ public class AdminService {
         }
         return true;
     }
-
-    public ApiResponse<?> addAdmin(AdminDTO adminDTO , AdminDetailDTO adminDetailDTO){
-
-
-        return null;
+    public int getAdminListCount(Map<String, Object> map){
+        return  adminDAO.getAdminListCount(map);
     }
+    public List<Map<String,Object>> getAdminList(Map<String, Object> map){
+        return adminDAO.getNoticeList(map);
+    }
+
+    public ApiResponse<?> addAdmin(Map<String,Object>map){
+        log.info("adminDTO : "+ map);
+
+        return new ApiResponse<>( CommonErrorCode.CODE_0000 );
+    }
+
 }
