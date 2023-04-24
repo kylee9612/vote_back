@@ -1,5 +1,7 @@
 package com.axiasoft.vote_back.admin.controller;
 
+import com.axiasoft.vote_back.admin.dto.AdminDTO;
+import com.axiasoft.vote_back.admin.dto.AdminDetailDTO;
 import com.axiasoft.vote_back.admin.service.AdminService;
 import com.axiasoft.vote_back.util.response.ApiResponse;
 import com.axiasoft.vote_back.util.response.CommonErrorCode;
@@ -53,8 +55,9 @@ public class AdminController {
     }
 
     @PostMapping("/addAdmin")
-    public ResponseEntity<?> addAdmin(@RequestParam(value = "coin_pic_list", required = false) List<MultipartFile> file,
-                                      @RequestParam Map<String,Object> map){
-        return ResponseEntity.ok(adminService.addCoin(map,file));
+    public ResponseEntity<?> addAdmin(@ModelAttribute AdminDTO adminDTO, @ModelAttribute AdminDetailDTO adminDetailDTO) {
+        // adminDTO와 adminDetailDTO 객체를 사용하여 로직을 처리합니다.
+        // ...
+        return ResponseEntity.ok(adminService.addAdmin(adminDTO,adminDetailDTO));
     }
 }

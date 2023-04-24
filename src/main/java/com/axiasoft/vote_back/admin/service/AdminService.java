@@ -1,6 +1,8 @@
 package com.axiasoft.vote_back.admin.service;
 
 import com.axiasoft.vote_back.admin.dao.AdminDAO;
+import com.axiasoft.vote_back.admin.dto.AdminDTO;
+import com.axiasoft.vote_back.admin.dto.AdminDetailDTO;
 import com.axiasoft.vote_back.util.response.AdminErrorCode;
 import com.axiasoft.vote_back.util.response.ApiResponse;
 import com.axiasoft.vote_back.util.response.CommonErrorCode;
@@ -107,5 +109,11 @@ public class AdminService {
             return false;
         }
         return true;
+    }
+
+    public ApiResponse<?> addAdmin(AdminDTO adminDTO , AdminDetailDTO adminDetailDTO){
+
+
+        return null;
     }
 }
