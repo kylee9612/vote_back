@@ -38,14 +38,29 @@
     </select>
 
     <select id="selectVoteResult" parameterType="hashmap" resultType="hashmap">
-        SELECT vr.vote_round as round,
-               cl.coin_name as coin_name,
-               COUNT(*) OVER (PARTITION BY vr.vote_target) as count
+        SELECT vr.vote_round                                            as round,
+               cl.coin_name                                             as coin_name,
+               COUNT(vr.vote_target) OVER (PARTITION BY vr.vote_target) as count,
+               rd.start_date                                            as start_date,
+               rd.end_date                                              as end_date
         FROM axia.vote_result vr
-        INNER JOIN axia.coin_list cl
-        ON vr.vote_target = cl.coin_idx
+                 INNER JOIN axia.coin_list cl
+                            ON vr.vote_target = cl.coin_idx
+                 INNER JOIN axia.vote_round rd
+                            ON vr.vote_round = rd.round
         WHERE vr.vote_round = #{round}
         ORDER BY vr.vote_round, vr.vote_target;
+    </select>
+
+    <select id="selectVoteList" parameterType="hashmap" resultType="hashmap">
+        SELECT cl.coin_name, cl.coin_idx, cl.coin_info, cl.coin_symbol, cp.order_idx, cp.picture
+        FROM axia.coin_list cl
+                 JOIN axia.vote_round vr
+                      ON cl.vote_round = vr.round
+                 LEFT JOIN axia.coin_pic cp
+                           ON cl.coin_idx = cp.coin_idx
+        WHERE cl.vote_round = #{round}
+        order by coin_idx, order_idx;
     </select>
 
     <select id="selectLatestVoteResult" resultType="hashmap">
@@ -73,5 +88,10 @@
     <insert id="insertCoinPicture" parameterType="hashmap">
         INSERT INTO axia.coin_pic
         VALUES (#{coin_idx}, #{picture}, #{order_idx})
+    </insert>
+    <insert id="insertVote" parameterType="com.axiasoft.vote_back.admin.domain.VoteVO">
+        INSERT INTO axia.vote_round
+        (round_title, round_content, ad_idx, reg_date, start_date, end_date)
+        VALUES (#{title}, #{content}, 1, now(), #{startDate}, #{endDate})
     </insert>
 </mapper>
