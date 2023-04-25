@@ -1,5 +1,6 @@
 package com.axiasoft.vote_back.admin.dao;
 
+import com.axiasoft.vote_back.admin.domain.VoteVO;
 import com.axiasoft.vote_back.util.cipher.SHA256Util;
 import jakarta.annotation.PostConstruct;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -15,7 +16,7 @@ public class AdminDAO {
     private SqlSessionTemplate sqlSessionTemplate;
     @Autowired
     private SHA256Util sha256Util;
-    private static String NAMESPACE = "com.axiasoft.vote_back.admin.dao.";
+    private static final String NAMESPACE = "com.axiasoft.vote_back.admin.dao.";
 
     private Set<String> sha256Set;
 
@@ -59,6 +60,10 @@ public class AdminDAO {
         return sqlSessionTemplate.selectList(NAMESPACE + "selectVoteResult", round);
     }
 
+    public List<Map<String, Object>> selectVoteList(int round) {
+        return sqlSessionTemplate.selectList(NAMESPACE + "selectVoteList", round);
+    }
+
     public List<Map<String, Object>> selectLatestVoteResult() {
         return sqlSessionTemplate.selectList(NAMESPACE + "selectLatestVoteResult");
     }
@@ -83,5 +88,8 @@ public class AdminDAO {
     }
     public int insertCoinPicture(Map<String, Object> map){
         return sqlSessionTemplate.insert(NAMESPACE+"insertCoinPicture",map);
+    }
+    public int insertVote(VoteVO vo){
+        return sqlSessionTemplate.insert(NAMESPACE + "insertVote",vo);
     }
 }

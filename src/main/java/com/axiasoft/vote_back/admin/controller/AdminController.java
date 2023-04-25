@@ -4,6 +4,7 @@ import com.axiasoft.vote_back.admin.dto.AdminDTO;
 import com.axiasoft.vote_back.admin.dto.AdminDetailDTO;
 import com.axiasoft.vote_back.admin.service.AdminService;
 import com.axiasoft.vote_back.util.PageUtil;
+import com.axiasoft.vote_back.admin.domain.VoteVO;
 import com.axiasoft.vote_back.util.response.ApiResponse;
 import com.axiasoft.vote_back.util.response.CommonErrorCode;
 import jakarta.annotation.Nullable;
@@ -34,10 +35,25 @@ public class AdminController {
         return ResponseEntity.ok(new ApiResponse<>(CommonErrorCode.CODE_0000, rtnMap));
     }
 
+    @PostMapping("/vote")
+    public ResponseEntity<?> addVote(@RequestBody VoteVO voteVO){
+        return ResponseEntity.ok(adminService.addVote(voteVO));
+//        return ResponseEntity.ok(new ApiResponse<>(CommonErrorCode.CODE_9999));
+    }
+
     @GetMapping("/vote/results")
     public ResponseEntity<?> voteResult(){
-        Map<String, List<Map<String, Object>>> rtnMap = adminService.voteResult();
-        return ResponseEntity.ok(new ApiResponse<>(CommonErrorCode.CODE_0000,rtnMap));
+        return ResponseEntity.ok(adminService.voteResult());
+    }
+
+    @GetMapping("/vote/list")
+    public ResponseEntity<?> voteList(){
+        return ResponseEntity.ok(adminService.getVoteList());
+    }
+
+    @GetMapping("/vote/list/last")
+    public ResponseEntity<?> latestVoteRound(){
+        return ResponseEntity.ok(adminService.voteLatestRound());
     }
 
     @GetMapping("/index")

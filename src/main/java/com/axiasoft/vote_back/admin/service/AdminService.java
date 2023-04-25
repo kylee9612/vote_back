@@ -3,6 +3,7 @@ package com.axiasoft.vote_back.admin.service;
 import com.axiasoft.vote_back.admin.dao.AdminDAO;
 import com.axiasoft.vote_back.admin.dto.AdminDTO;
 import com.axiasoft.vote_back.admin.dto.AdminDetailDTO;
+import com.axiasoft.vote_back.admin.domain.VoteVO;
 import com.axiasoft.vote_back.util.response.AdminErrorCode;
 import com.axiasoft.vote_back.util.response.ApiResponse;
 import com.axiasoft.vote_back.util.response.CommonErrorCode;
@@ -31,24 +32,21 @@ public class AdminService {
         return resultMap;
     }
 
-    /**
-     * TODO
-     * reg_date 2023-03-30
-     * 프론트 최종 완성 후
-     * earliestRound 및 latest Round 를 for 문 조건으로 변경 해 주어야함
-     */
-
-    public Map<String, List<Map<String, Object>>> voteResult() {
+    public ApiResponse<?> voteResult() {
         int latestRound = adminDAO.selectLatestRound();
-        int earliestRound = adminDAO.selectStartRound();
         Map<String, List<Map<String, Object>>> map = new HashMap<>();
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= latestRound; i++) {
             List<Map<String, Object>> voteResult = adminDAO.selectVoteResult(i);
-            if(voteResult.size() != 0)
+            if (voteResult.size() != 0)
                 map.put(String.valueOf(i), voteResult);
         }
         log.info(map);
-        return map;
+        return new ApiResponse<>(CommonErrorCode.CODE_0000, map);
+    }
+
+    public ApiResponse<?> voteLatestRound() {
+        int lastRound = adminDAO.selectLatestRound();
+        return new ApiResponse<>(CommonErrorCode.CODE_0000, lastRound);
     }
 
     @Transactional
@@ -73,6 +71,17 @@ public class AdminService {
         return new ApiResponse<>(addCoinPicture(fileList, idx) ? CommonErrorCode.CODE_0000 : CommonErrorCode.CODE_9999, map);
     }
 
+    @Transactional
+    public ApiResponse<?> addVote(VoteVO voteVO){
+        try{
+            log.info(voteVO);
+            return new ApiResponse<>(adminDAO.insertVote(voteVO) == 1 ? CommonErrorCode.CODE_0000 : CommonErrorCode.CODE_9999);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse<>(CommonErrorCode.CODE_9999);
+        }
+    }
+
     public List<Map<String, Object>> latestVoteResult() {
         return adminDAO.selectLatestVoteResult();
     }
@@ -93,6 +102,29 @@ public class AdminService {
             list.add(map.get("round").toString());
         }
         return list;
+    }
+
+    public ApiResponse<?> getVoteList() {
+        try {
+            int latestRound = adminDAO.selectLatestRound();
+            List<Map<String, Object>> rtnList = new ArrayList<>();
+            for (int i = 1; i <= latestRound; i++) {
+                List<Map<String, Object>> listMap = adminDAO.selectVoteList(i);
+                if (listMap.size() != 0) {
+                    Map<String, Object> map = listMap.get(0);
+                    List<byte[]> blobs = new ArrayList<>();
+                    for (Map<String, Object> list : listMap) {
+                        blobs.add((byte[]) list.get("picture"));
+                    }
+                    map.put("picture", blobs);
+                    rtnList.add(map);
+                }
+            }
+            return new ApiResponse<>(CommonErrorCode.CODE_0000, rtnList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ApiResponse<>(CommonErrorCode.CODE_9999);
+        }
     }
 
     private boolean addCoinPicture(List<MultipartFile> fileList, int coinIdx) {
