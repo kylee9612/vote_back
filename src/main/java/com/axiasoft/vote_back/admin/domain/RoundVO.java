@@ -9,7 +9,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class VoteVO {
+public class RoundVO {
     private int round;
     private String title;
     private String content;

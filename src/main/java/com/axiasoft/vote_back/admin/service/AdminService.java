@@ -1,7 +1,7 @@
 package com.axiasoft.vote_back.admin.service;
 
 import com.axiasoft.vote_back.admin.dao.AdminDAO;
-import com.axiasoft.vote_back.admin.domain.VoteVO;
+import com.axiasoft.vote_back.admin.domain.RoundVO;
 import com.axiasoft.vote_back.util.response.AdminErrorCode;
 import com.axiasoft.vote_back.util.response.ApiResponse;
 import com.axiasoft.vote_back.util.response.CommonErrorCode;
@@ -70,10 +70,10 @@ public class AdminService {
     }
 
     @Transactional
-    public ApiResponse<?> addVote(VoteVO voteVO){
+    public ApiResponse<?> addVote(RoundVO roundVO){
         try{
-            log.info(voteVO);
-            return new ApiResponse<>(adminDAO.insertVote(voteVO) == 1 ? CommonErrorCode.CODE_0000 : CommonErrorCode.CODE_9999);
+            log.info(roundVO);
+            return new ApiResponse<>(adminDAO.insertVote(roundVO) == 1 ? CommonErrorCode.CODE_0000 : CommonErrorCode.CODE_9999);
         }catch (Exception e){
             e.printStackTrace();
             return new ApiResponse<>(CommonErrorCode.CODE_9999);
@@ -102,22 +102,24 @@ public class AdminService {
         return list;
     }
 
-    public ApiResponse<?> getVoteList() {
+    public ApiResponse<?> getRoundList() {
         try {
-            int latestRound = adminDAO.selectLatestRound();
-            List<Map<String, Object>> rtnList = new ArrayList<>();
-            for (int i = 1; i <= latestRound; i++) {
-                List<Map<String, Object>> listMap = adminDAO.selectVoteList(i);
-                if (listMap.size() != 0) {
-                    Map<String, Object> map = listMap.get(0);
-                    List<byte[]> blobs = new ArrayList<>();
-                    for (Map<String, Object> list : listMap) {
-                        blobs.add((byte[]) list.get("picture"));
-                    }
-                    map.put("picture", blobs);
-                    rtnList.add(map);
-                }
-            }
+            List<RoundVO> rtnList = adminDAO.selectRoundList();
+//            int latestRound = adminDAO.selectLatestRound();
+//            List<Map<String, Object>> rtnList = new ArrayList<>();
+//            for (int i = 1; i <= latestRound; i++) {
+
+//                List<Map<String, Object>> listMap = adminDAO.selectVoteList(i);
+//                if (listMap.size() != 0) {
+//                    Map<String, Object> map = listMap.get(0);
+//                    List<byte[]> blobs = new ArrayList<>();
+//                    for (Map<String, Object> list : listMap) {
+//                        blobs.add((byte[]) list.get("picture"));
+//                    }
+//                    map.put("picture", blobs);
+//                    rtnList.add(map);
+//                }
+//            }
             return new ApiResponse<>(CommonErrorCode.CODE_0000, rtnList);
         } catch (Exception e) {
             e.printStackTrace();
