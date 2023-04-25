@@ -5,6 +5,7 @@ import com.axiasoft.vote_back.admin.dto.AdminDetailDTO;
 import com.axiasoft.vote_back.admin.service.AdminService;
 import com.axiasoft.vote_back.util.PageUtil;
 import com.axiasoft.vote_back.admin.domain.VoteVO;
+import com.axiasoft.vote_back.admin.domain.RoundVO;
 import com.axiasoft.vote_back.util.response.ApiResponse;
 import com.axiasoft.vote_back.util.response.CommonErrorCode;
 import jakarta.annotation.Nullable;
@@ -36,8 +37,8 @@ public class AdminController {
     }
 
     @PostMapping("/vote")
-    public ResponseEntity<?> addVote(@RequestBody VoteVO voteVO){
-        return ResponseEntity.ok(adminService.addVote(voteVO));
+    public ResponseEntity<?> addVote(@RequestBody RoundVO roundVO){
+        return ResponseEntity.ok(adminService.addVote(roundVO));
 //        return ResponseEntity.ok(new ApiResponse<>(CommonErrorCode.CODE_9999));
     }
 
@@ -46,9 +47,9 @@ public class AdminController {
         return ResponseEntity.ok(adminService.voteResult());
     }
 
-    @GetMapping("/vote/list")
-    public ResponseEntity<?> voteList(){
-        return ResponseEntity.ok(adminService.getVoteList());
+    @GetMapping("/round/list")
+    public ResponseEntity<?> roundList(){
+        return ResponseEntity.ok(adminService.getRoundList());
     }
 
     @GetMapping("/vote/list/last")
