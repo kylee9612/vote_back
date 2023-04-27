@@ -72,8 +72,9 @@ public class AdminService {
     @Transactional
     public ApiResponse<?> addVote(RoundVO roundVO){
         try{
-            log.info(roundVO);
-            return new ApiResponse<>(adminDAO.insertVote(roundVO) == 1 ? CommonErrorCode.CODE_0000 : CommonErrorCode.CODE_9999);
+            log.info(roundVO.getRound());
+            log.info("insert Result : " +adminDAO.insertVote(roundVO));
+            return new ApiResponse<>(CommonErrorCode.CODE_0000);
         }catch (Exception e){
             e.printStackTrace();
             return new ApiResponse<>(CommonErrorCode.CODE_9999);
@@ -105,23 +106,17 @@ public class AdminService {
     public ApiResponse<?> getRoundList() {
         try {
             List<RoundVO> rtnList = adminDAO.selectRoundList();
-//            int latestRound = adminDAO.selectLatestRound();
-//            List<Map<String, Object>> rtnList = new ArrayList<>();
-//            for (int i = 1; i <= latestRound; i++) {
-
-//                List<Map<String, Object>> listMap = adminDAO.selectVoteList(i);
-//                if (listMap.size() != 0) {
-//                    Map<String, Object> map = listMap.get(0);
-//                    List<byte[]> blobs = new ArrayList<>();
-//                    for (Map<String, Object> list : listMap) {
-//                        blobs.add((byte[]) list.get("picture"));
-//                    }
-//                    map.put("picture", blobs);
-//                    rtnList.add(map);
-//                }
-//            }
             return new ApiResponse<>(CommonErrorCode.CODE_0000, rtnList);
         } catch (Exception e) {
+            e.printStackTrace();
+            return new ApiResponse<>(CommonErrorCode.CODE_9999);
+        }
+    }
+
+    public ApiResponse<?> getRoundInfo(int num){
+        try{
+            return new ApiResponse<>(CommonErrorCode.CODE_0000,adminDAO.selectRoundInfo(num));
+        }catch (Exception e ){
             e.printStackTrace();
             return new ApiResponse<>(CommonErrorCode.CODE_9999);
         }

@@ -42,7 +42,12 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getRoundList());
     }
 
-    @GetMapping("/vote/list/last")
+    @GetMapping("/round/list/{num}")
+    public ResponseEntity<?> getRound(@PathVariable("num") int num){
+        return ResponseEntity.ok(adminService.getRoundInfo(num));
+    }
+
+    @GetMapping("/round/list/last")
     public ResponseEntity<?> latestVoteRound(){
         return ResponseEntity.ok(adminService.voteLatestRound());
     }
