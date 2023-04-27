@@ -145,10 +145,21 @@
         SELECT vr.round,
                vr.round_content as content,
                vr.round_title as title,
-               vr.start_date as startDate,
-               vr.end_date as endDate
+               date_format(vr.start_date,'%Y-%m-%d') as startDate,
+               date_format(vr.end_date,'%Y-%m-%d') as endDate
         FROM axia.vote_round vr
         order by vr.round
+    </select>
+
+    <select id="selectRoundInfo" parameterType="int" resultType="com.axiasoft.vote_back.admin.domain.RoundVO">
+        SELECT vr.round,
+               vr.round_content as content,
+               vr.round_title as title,
+               date_format(vr.start_date,'%Y-%m-%d') as startDate,
+               date_format(vr.end_date,'%Y-%m-%d') as endDate
+        FROM axia.vote_round vr
+        WHERE round = #{num}
+        LIMIT 1
     </select>
 
     <select id="selectVoteList" parameterType="hashmap" resultType="hashmap">
@@ -190,7 +201,14 @@
     </insert>
     <insert id="insertVote" parameterType="com.axiasoft.vote_back.admin.domain.RoundVO">
         INSERT INTO axia.vote_round
-        (round_title, round_content, ad_idx, reg_date, start_date, end_date)
-        VALUES (#{title}, #{content}, 1, now(), #{startDate}, #{endDate})
+        (round, round_title, round_content, ad_idx, reg_date, start_date, end_date)
+        VALUES (#{round}, #{title}, #{content}, 1, now(), #{startDate}, #{endDate})
+        ON DUPLICATE KEY UPDATE
+            round_title = #{title},
+            round_content = #{content},
+            ad_idx = 1,
+            reg_date = now(),
+            start_date = #{startDate},
+            end_date = #{endDate}
     </insert>
 </mapper>

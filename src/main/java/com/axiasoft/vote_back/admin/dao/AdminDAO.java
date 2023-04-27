@@ -68,6 +68,10 @@ public class AdminDAO {
         return sqlSessionTemplate.selectList(NAMESPACE + "selectRoundList");
     }
 
+    public RoundVO selectRoundInfo(int num) {
+        return sqlSessionTemplate.selectOne(NAMESPACE + "selectRoundInfo", num);
+    }
+
     public List<Map<String, Object>> selectLatestVoteResult() {
         return sqlSessionTemplate.selectList(NAMESPACE + "selectLatestVoteResult");
     }
