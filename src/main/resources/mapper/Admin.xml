@@ -213,11 +213,12 @@
     </insert>
     <insert id="insertAdmin" parameterType="com.axiasoft.vote_back.admin.dto.AdminDTO" useGeneratedKeys="true"  keyProperty="ad_idx">
         INSERT INTO
-            axia.admin(ad_id,ad_pw,reg_date)
+            axia.admin(ad_id,ad_pw,ad_level,reg_date)
         VALUES
             (
                 ${ad_id},
                 ${ad_pw},
+                ${ad_level},
                 NOW()
             )
         ON DUPLICATE KEY UPDATE
