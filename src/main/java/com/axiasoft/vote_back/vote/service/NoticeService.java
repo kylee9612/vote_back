@@ -58,6 +58,7 @@ public class NoticeService {
 //    }
     // 공지사항 리스트
     public List<Map<String,Object>> getNoticeList(Map<String, Object> map){
+        log.info("map : "+ map);
         return noticeDAO.getNoticeList(map);
     }
     public ApiResponse<?> editNotice(Map<String, Object> map , @Nullable List<MultipartFile> fileList){

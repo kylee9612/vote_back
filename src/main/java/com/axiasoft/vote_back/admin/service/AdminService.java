@@ -3,7 +3,6 @@ package com.axiasoft.vote_back.admin.service;
 import com.axiasoft.vote_back.admin.dao.AdminDAO;
 import com.axiasoft.vote_back.admin.dto.AdminDTO;
 import com.axiasoft.vote_back.admin.dto.AdminDetailDTO;
-import com.axiasoft.vote_back.admin.domain.VoteVO;
 import com.axiasoft.vote_back.admin.domain.RoundVO;
 import com.axiasoft.vote_back.util.response.AdminErrorCode;
 import com.axiasoft.vote_back.util.response.ApiResponse;
@@ -145,17 +144,29 @@ public class AdminService {
         }
         return true;
     }
-    public int getAdminListCount(Map<String, Object> map){
+    public int selectAdminListCount(Map<String, Object> map){
         return  adminDAO.getAdminListCount(map);
     }
-    public List<Map<String,Object>> getAdminList(Map<String, Object> map){
-        return adminDAO.getNoticeList(map);
+    public List<Map<String,Object>> selectAdminList(Map<String, Object> map){
+        return adminDAO.selectAdminList(map);
     }
 
-    public ApiResponse<?> addAdmin(Map<String,Object>map){
+    public ApiResponse<?> createAdmin(Map<String,Object>map){
         log.info("adminDTO : "+ map);
 
         return new ApiResponse<>( CommonErrorCode.CODE_0000 );
+    }
+    public ApiResponse<?> updateAdmin(Map<String,Object>map){
+        log.info("adminDTOsadfasf : "+ map);
+
+        return new ApiResponse<>( CommonErrorCode.CODE_0000 );
+    }
+    public ApiResponse<?> selectAdmin(int ad_idx){
+        log.info("ad_idx : "+ ad_idx);
+
+        Map<String, Object> map = adminDAO.selectAdmin(ad_idx);
+
+        return new ApiResponse<>(CommonErrorCode.CODE_0000 );
     }
 
 }

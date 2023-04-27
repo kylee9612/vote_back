@@ -4,7 +4,6 @@ import com.axiasoft.vote_back.admin.dto.AdminDTO;
 import com.axiasoft.vote_back.admin.dto.AdminDetailDTO;
 import com.axiasoft.vote_back.admin.service.AdminService;
 import com.axiasoft.vote_back.util.PageUtil;
-import com.axiasoft.vote_back.admin.domain.VoteVO;
 import com.axiasoft.vote_back.admin.domain.RoundVO;
 import com.axiasoft.vote_back.util.response.ApiResponse;
 import com.axiasoft.vote_back.util.response.CommonErrorCode;
@@ -77,30 +76,45 @@ public class AdminController {
         return ResponseEntity.ok(adminService.addCoin(map,file));
     }
 
-    @PostMapping("/addAdmin")
-    public ResponseEntity<?> addAdmin(@RequestBody Map<String,Object> map) {
+    // -- add admin --
+    @PostMapping("/admin")
+    public ResponseEntity<?> createAdmin(@RequestParam Map<String,Object> map) {
+        log.info("createAdmin");
         // adminDTO와 adminDetailDTO 객체를 사용하여 로직을 처리합니다.
-        return ResponseEntity.ok(adminService.addAdmin(map));
+        return ResponseEntity.ok(adminService.createAdmin(map));
+    }
+    @PutMapping("/admin")
+    public ResponseEntity<?> updateAdmin(@RequestParam Map<String,Object> map) {
+        // adminDTO와 adminDetailDTO 객체를 사용하여 로직을 처리합니다.
+        log.info("updateAdmin");
+        return ResponseEntity.ok(adminService.createAdmin(map));
+    }
+    @GetMapping("/admin/{ad_idx}")
+    public ResponseEntity<?> selectAdmin(@PathVariable("ad_idx") int ad_idx) {
+        // adminDTO와 adminDetailDTO 객체를 사용하여 로직을 처리합니다.
+        return ResponseEntity.ok(adminService.selectAdmin(ad_idx));
     }
 
-    @PostMapping("/getAdminList")
-    public ResponseEntity<?> getAdminList(@RequestParam Map<String, Object> paramMap, HttpServletRequest request, HttpServletResponse response) {
+    @GetMapping("/admin/list")
+    public ResponseEntity<?> selectAdminList(@RequestParam Map<String, Object> params, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> returnMap = new HashMap<>();
         log.info("=============================START========================================== in " + request.getRequestURL());
-        log.info("paramMap :::" + paramMap);
+        log.info("params :::" + params);
 
-        paramMap = PageUtil.curPage(paramMap);
+        params = PageUtil.curPage(params);
 
-        int adminCount = adminService.getAdminListCount(paramMap);
+        int adminCount = adminService.selectAdminListCount(params);
         int lastPage = PageUtil.getLastPage(adminCount);
 
         // pageNation
-        List<Map<String, Object>> adminList = adminService.getAdminList(paramMap);
+        List<Map<String, Object>> adminList = adminService.selectAdminList(params);
 
         returnMap.put("lastPage", lastPage);
         returnMap.put("adminList", adminList);
         log.info("returnMap :: " + returnMap);
         return ResponseEntity.ok(new ApiResponse(CommonErrorCode.CODE_0000, returnMap));
     }
+
+    // -- add admin --
 
 }

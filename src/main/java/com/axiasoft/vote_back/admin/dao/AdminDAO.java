@@ -83,8 +83,12 @@ public class AdminDAO {
     public int getAdminListCount (Map<String, Object> map){
         return (int)sqlSessionTemplate.selectOne(NAMESPACE+ "selectAdminListCount", map);
     }
-    public List<Map<String,Object>> getNoticeList (Map<String, Object> map){
-        return sqlSessionTemplate.selectList(NAMESPACE+ "selectNoticeList", map);
+    public List<Map<String,Object>> selectAdminList (Map<String, Object> map){
+        return sqlSessionTemplate.selectList(NAMESPACE+ "selectAdminList", map);
+    }
+
+    public Map<String,Object> selectAdmin (int ad_idx){
+        return sqlSessionTemplate.selectOne(NAMESPACE+ "selectAdmin", ad_idx);
     }
 
     public int insertCoin(Map<String, Object> map) {

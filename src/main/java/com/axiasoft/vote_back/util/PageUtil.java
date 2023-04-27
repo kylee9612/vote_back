@@ -21,13 +21,13 @@ public class PageUtil {
                 int startNum = (curPage - 1) * 10;
                 int lastNum = curPage * 10;
 
-                returnMap.put("startNum", startNum);
-                returnMap.put("lastNum", lastNum);
+                map.put("startNum", startNum);
+                map.put("lastNum", lastNum);
             }
         } catch (Exception e) {
             log.error(e);
         }
-        return returnMap;
+        return map;
     }
 
     public static int getLastPage(int count) {

@@ -5,61 +5,91 @@
 <mapper namespace="com.axiasoft.vote_back.admin.dao">
     <select id="selectAdminListCount" parameterType="hashmap" resultType="int">
         SELECT
-        count(*)
+        count(*) count
         FROM
         axia.admin A
-        INNER JOIN axia.admin_detail AD
+        left join axia.admin_detail AD
+        on AD.ad_idx = A.ad_idx
         WHERE
         1=1
         <if test="searchText !=null and searchText !='' ">
             AND
-            <if test="searchType = 0 ">
-                A.ad_id LIKE '%${searchText}%'
-            </if>
-
-            <if test="searchType = 1 ">
-                AD.ad_name LIKE '%${searchText}%'
-            </if>
-
-            <if test="searchType = 2 ">
-                AD.ad_phone LIKE '%${searchText}%'
-            </if>
+            <choose>
+                <when test="searchType == 0">
+                    A.ad_id LIKE '%${searchText}%'
+                </when>
+                <when test="searchType == 1">
+                    AD.ad_name LIKE '%${searchText}%'
+                </when>
+                <when test="searchType == 2">
+                    AD.ad_phone LIKE '%${searchText}%'
+                </when>
+            </choose>
         </if>
 
         ORDER BY
         A.ad_idx desc
     </select>
 
-    <select id="selectNoticeList" parameterType="hashmap" resultType="hashmap">
+    <select id="selectAdminList" parameterType="hashmap" resultType="hashmap">
         SELECT
-        count(*)
+        A.ad_idx,
+        A.ad_id,
+        A.ad_pw,
+        A.ad_otp_code,
+        A.ad_level,
+        AD.ad_name,
+        AD.ad_phone,
+        DATE_FORMAT(A.reg_date, '%Y-%m-%d') AS "reg_date"
         FROM
         axia.admin A
-        INNER JOIN axia.admin_detail AD
+        left join axia.admin_detail AD
+        on AD.ad_idx = A.ad_idx
         WHERE
         1=1
         <if test="searchText !=null and searchText !='' ">
             AND
-            <if test="searchType = 0 ">
-                A.ad_id LIKE '%${searchText}%'
-            </if>
-
-            <if test="searchType = 1 ">
-                AD.ad_name LIKE '%${searchText}%'
-            </if>
-
-            <if test="searchType = 2 ">
-                AD.ad_phone LIKE '%${searchText}%'
-            </if>
+            <choose>
+                <when test="searchType == 0">
+                    A.ad_id LIKE '%${searchText}%'
+                </when>
+                <when test="searchType == 1">
+                    AD.ad_name LIKE '%${searchText}%'
+                </when>
+                <when test="searchType == 2">
+                    AD.ad_phone LIKE '%${searchText}%'
+                </when>
+            </choose>
         </if>
-
         ORDER BY
         A.ad_idx desc
-
         <if test="startNum != null and !startNum.equals('') and lastNum != null and !lastNum.equals('')">
             LIMIT #{startNum}, #{lastNum}
         </if>
     </select>
+
+    <select id="selectAdmin" parameterType="int" resultType="hashmap">
+        SELECT
+            A.ad_idx,
+            A.ad_id,
+            A.ad_pw,
+            A.ad_otp_code,
+            A.ad_level,
+            AD.ad_name,
+            AD.ad_phone,
+            DATE_FORMAT(A.reg_date, '%Y-%m-%d') AS "reg_date"
+        FROM
+            axia.admin A
+        LEFT JOIN
+            axia.admin_detail AD
+        ON
+            AD.ad_idx = A.ad_idx
+        WHERE
+            1=1
+        AND
+            A.ad_idx = ${ad_idx}
+    </select>
+
 
 
     <select id="selectLogin" parameterType="hashmap" resultType="hashmap">
