@@ -1,6 +1,8 @@
 package com.axiasoft.vote_back.admin.dao;
 
 import com.axiasoft.vote_back.admin.domain.RoundVO;
+import com.axiasoft.vote_back.admin.dto.AdminDTO;
+import com.axiasoft.vote_back.admin.dto.AdminDetailDTO;
 import com.axiasoft.vote_back.util.cipher.SHA256Util;
 import jakarta.annotation.PostConstruct;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -90,9 +92,14 @@ public class AdminDAO {
     public List<Map<String,Object>> selectAdminList (Map<String, Object> map){
         return sqlSessionTemplate.selectList(NAMESPACE+ "selectAdminList", map);
     }
-
     public Map<String,Object> selectAdmin (int ad_idx){
         return sqlSessionTemplate.selectOne(NAMESPACE+ "selectAdmin", ad_idx);
+    }
+    public int createAdmin(AdminDTO adminDTO){
+        return sqlSessionTemplate.insert(NAMESPACE+"insertAdmin", adminDTO);
+    }
+    public void createAdminDetail(AdminDetailDTO adminDetailDTO){
+        sqlSessionTemplate.insert(NAMESPACE+"insertAdminDetail", adminDetailDTO);
     }
 
     public int insertCoin(Map<String, Object> map) {

@@ -147,13 +147,23 @@ public class AdminService {
     }
 
     public ApiResponse<?> createAdmin(Map<String,Object>map){
-        log.info("adminDTO : "+ map);
 
-        return new ApiResponse<>( CommonErrorCode.CODE_0000 );
+        try{
+            AdminDTO adminDTO = new AdminDTO(map);
+            adminDAO.createAdmin(adminDTO);
+            log.info("ad_idx : "+ adminDTO.getAd_idx());
+            map.put("ad_idx" , adminDTO.getAd_idx());
+            AdminDetailDTO adminDetailDTO = new AdminDetailDTO(map);
+            log.info(adminDetailDTO.toString());
+            adminDAO.createAdminDetail(adminDetailDTO);
+        }catch (Exception e){
+            log.error(e);
+        }
+        return new ApiResponse<>( CommonErrorCode.CODE_0000);
     }
     public ApiResponse<?> updateAdmin(Map<String,Object>map){
         log.info("adminDTOsadfasf : "+ map);
-
+//        adminDAO.updateAdmin(map);
         return new ApiResponse<>( CommonErrorCode.CODE_0000 );
     }
     public ApiResponse<?> selectAdmin(int ad_idx){

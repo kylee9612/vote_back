@@ -211,4 +211,28 @@
             start_date = #{startDate},
             end_date = #{endDate}
     </insert>
+    <insert id="insertAdmin" parameterType="com.axiasoft.vote_back.admin.dto.AdminDTO" useGeneratedKeys="true"  keyProperty="ad_idx">
+        INSERT INTO
+            axia.admin(ad_id,ad_pw,reg_date)
+        VALUES
+            (
+                ${ad_id},
+                ${ad_pw},
+                NOW()
+            )
+        ON DUPLICATE KEY UPDATE
+            ad_id = ${ad_id},
+            ad_pw = ${ad_pw}
+    </insert>
+
+    <insert id="insertAdminDetail" parameterType="com.axiasoft.vote_back.admin.dto.AdminDetailDTO">
+        INSERT INTO
+            axia.admin_detail(ad_idx,ad_name,ad_phone)
+        VALUES
+            (
+                ${ad_idx},
+                ${ad_name},
+                ${ad_phone}
+            )
+    </insert>
 </mapper>
